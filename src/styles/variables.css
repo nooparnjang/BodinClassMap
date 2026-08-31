@@ -1,0 +1,34 @@
+:root{
+
+    /* ===== Brand ===== */
+
+    --primary: #15499A;
+    --primary-hover: #012C6E;
+    --primary-light: #849EC6;
+
+    /* ===== Status ===== */
+
+    --green: rgba(128, 223, 142, 0.6);
+    --red: rgba(223, 128, 128, 0.6);
+    --yellow: rgba(255, 248, 58, 0.6);
+
+    /* ===== Background ===== */
+
+    --background: #F2F2F2;
+    --surface: #FFFFFF;
+
+    /* ===== Text ===== */
+
+    --text: #000;
+    --text-secondary: #FFF;
+
+    /* ===== Shadow ===== */
+
+    --shadow:
+        0 4px 4px 0 rgba(0, 0, 0, 0.25);
+
+    /* ===== Animation ===== */
+
+    --transition: 0.3s ease-in;
+
+}
