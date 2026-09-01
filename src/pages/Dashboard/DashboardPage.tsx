@@ -298,7 +298,7 @@ function DashboardPage() {
 
         <section className={styles.bookingPanel}>
           <div className={styles.bookingHeader}>
-            <div className={styles.bookingTitle}>จองโต๊ะ {seatInput ? Number(seatInput) : 0}</div>
+            <div className={styles.bookingTitle}>จองโต๊ะ {seatInput ? Number(seatInput) : "N/A"}</div>
             <div className={styles.locationRow}>
               <span>📍</span>
               <span>{selectedRoom.roomName}</span>
