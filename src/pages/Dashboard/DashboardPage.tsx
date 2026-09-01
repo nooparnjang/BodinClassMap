@@ -48,6 +48,7 @@ function DashboardPage() {
   const [success, setSuccess] = useState("");
   const [classroomReservations, setClassroomReservations] = useState<Record<string, number>>({});
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showCancelConfirmModal, setShowCancelConfirmModal] = useState(false);
   const hasValidBodinEmail = isAllowedEmail(currentUser?.email);
   const selectedRoom = ROOM_CONFIG[classroomId] ?? ROOM_CONFIG.ROOM_614;
 
@@ -127,11 +128,13 @@ function DashboardPage() {
   const handleCancelReservation = async () => {
     if (!hasValidBodinEmail) {
       setError("You are not logged in with @bodin.ac.th.");
+      setShowCancelConfirmModal(false);
       return;
     }
 
     try {
       setReservationLoading(true);
+      setShowCancelConfirmModal(false);
       await cancelReservation(currentUser!.email!, classroomId);
       setSuccess("Reservation cancelled");
       setSeatInput("");
@@ -319,7 +322,7 @@ function DashboardPage() {
           {reservation && reservation.table > 0 && (
             <button
               type="button"
-              onClick={handleCancelReservation}
+              onClick={() => setShowCancelConfirmModal(true)}
               disabled={reservationLoading}
               className={styles.confirmButton}
               style={{ marginTop: "12px", background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)" }}
@@ -329,6 +332,26 @@ function DashboardPage() {
           )}
         </section>
       </div>
+
+      {showCancelConfirmModal && (
+        <div className={styles.modalBackdrop} onClick={() => setShowCancelConfirmModal(false)}>
+          <div className={styles.modalCard} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.modalIcon}>⚠️</div>
+            <h3 className={styles.modalTitle}>ยืนยันการยกเลิกการจอง</h3>
+            <p className={styles.modalText}>
+              คุณต้องการยกเลิกการจองโต๊ะ {reservation?.table ?? "-"} ใน {selectedRoom.roomName} ใช่หรือไม่?
+            </p>
+            <div className={styles.modalActions}>
+              <button type="button" className={`${styles.modalButton} ${styles.cancelButton}`} onClick={() => setShowCancelConfirmModal(false)}>
+                ยกเลิก
+              </button>
+              <button type="button" className={`${styles.modalButton} ${styles.primaryButton}`} onClick={handleCancelReservation}>
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showConfirmModal && (
         <div className={styles.modalBackdrop} onClick={() => setShowConfirmModal(false)}>
