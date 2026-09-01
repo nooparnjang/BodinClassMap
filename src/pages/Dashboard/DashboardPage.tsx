@@ -12,6 +12,14 @@ interface Reservation {
 }
 
 const TABLES_PER_CLASSROOM = 40;
+const ALLOWED_EMAILS = ["koonnuthhh@gmail.com"];
+
+const isAllowedEmail = (email?: string | null) => {
+  const normalizedEmail = email?.toLowerCase();
+  if (!normalizedEmail) return false;
+
+  return normalizedEmail.endsWith("@bodin.ac.th") || ALLOWED_EMAILS.includes(normalizedEmail);
+};
 
 const ROOM_CONFIG: Record<string, { label: string; subtitle: string; roomCode: string; roomName: string }> = {
   ROOM_614: {
@@ -40,7 +48,7 @@ function DashboardPage() {
   const [success, setSuccess] = useState("");
   const [classroomReservations, setClassroomReservations] = useState<Record<string, number>>({});
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const hasValidBodinEmail = currentUser?.email?.toLowerCase().endsWith("@bodin.ac.th") ?? false;
+  const hasValidBodinEmail = isAllowedEmail(currentUser?.email);
   const selectedRoom = ROOM_CONFIG[classroomId] ?? ROOM_CONFIG.ROOM_614;
 
   useEffect(() => {
