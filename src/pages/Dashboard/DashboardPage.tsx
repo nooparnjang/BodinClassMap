@@ -185,6 +185,11 @@ function DashboardPage() {
       return;
     }
 
+    if (reservation && reservation.table > 0 && !isCurrentUserTable(tableNumber)) {
+      setError("You already have a reserved table. Please cancel your current reservation before booking another one.");
+      return;
+    }
+
     const status = getTableStatus(tableNumber);
     if (status.reserved && !isCurrentUserTable(tableNumber)) {
       setError(`Table ${tableNumber} is already reserved by student ${status.studentId}.`);
@@ -313,10 +318,10 @@ function DashboardPage() {
           <button
             type="button"
             className={styles.confirmButton}
-            disabled={!seatInput || reservationLoading}
+            disabled={!seatInput || reservationLoading || !!(reservation && reservation.table > 0)}
             onClick={() => setShowConfirmModal(true)}
           >
-            {reservationLoading ? "กำลังจอง..." : "ยืนยันการจอง"}
+            {reservationLoading ? "กำลังจอง..." : (reservation && reservation.table > 0 ? "คุณมีโต๊ะที่จองแล้ว" : "ยืนยันการจอง")}
           </button>
 
           {reservation && reservation.table > 0 && (

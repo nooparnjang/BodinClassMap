@@ -1,9 +1,23 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Allow authenticated users to read/write their own student record in any classroom
+    function isAllowedEmail() {
+      return request.auth != null && (
+        request.auth.token.email.matches(/.*@bodin\\.ac\\.th$/) ||
+        request.auth.token.email == 'teacher@gmail.com'
+      );
+    }
+
     match /{classroomId}/{studentId} {
-      allow read, write: if request.auth != null;
+      allow read: if isAllowedEmail() && (
+        request.auth.token.email == studentId + '@bodin.ac.th' ||
+        request.auth.token.email == 'teacher@gmail.com'
+      );
+
+      allow write: if isAllowedEmail() && (
+        request.auth.token.email == studentId + '@bodin.ac.th' ||
+        request.auth.token.email == 'teacher@gmail.com'
+      ) && request.resource.data.table is number && request.resource.data.table >= 0 && request.resource.data.table <= 40;
     }
   }
 }
